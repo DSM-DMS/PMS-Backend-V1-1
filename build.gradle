@@ -21,10 +21,15 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    // For testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Spring Security
     compile "org.springframework.boot:spring-boot-starter-security"
+    // Swagger
+    implementation "io.springfox:springfox-boot-starter:3.0.0"
 }
 
 test {
