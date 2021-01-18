@@ -1,0 +1,8 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+logging:
+  file:
+    path: log
+  level.com.dms.pms.error: ERROR
