@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  application:
+    image: smoothbear04/dms-pms-auth:${VERSION}.RELEASE
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - log: ${LOCAL_LOGGING_PATH}
