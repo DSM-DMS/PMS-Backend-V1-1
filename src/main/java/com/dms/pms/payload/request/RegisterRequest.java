@@ -3,16 +3,24 @@ package com.dms.pms.payload.request;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
 public class RegisterRequest {
-    @ApiModelProperty(example = "<id>")
-    private String id;
+    @ApiModelProperty(example = "<email>")
+    @Email
+    @NotNull
+    private String email;
 
     @ApiModelProperty(example = "<password>")
+    @NotNull
     private String password;
 
     @ApiModelProperty(example = "<name>")
+    @NotNull
     private String name;
 }

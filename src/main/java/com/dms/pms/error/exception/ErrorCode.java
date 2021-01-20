@@ -9,8 +9,9 @@ import lombok.Getter;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode {
     BAD_REQUEST(400, "Bad Request: Invalid Parameter."),
-    USER_NOT_FOUND(404, "Not Found: User not found.");
-
+    UNAUTHORIZED(401, "UnAuthorized: Please check your authentication"),
+    USER_NOT_FOUND(404, "Not Found: Parent not found."),
+    USER_DUPLICATION(409, "Conflict: User already exists.");
 
     private final int status;
     private final String message;

@@ -26,7 +26,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     // For testing
     testImplementation 'com.h2database:h2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+        exclude module: 'junit'
+    }
     // Spring Security
     compile "org.springframework.boot:spring-boot-starter-security"
     // Swagger
@@ -37,6 +39,8 @@ dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
     // Mysql Driver
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+    // Validation
+    implementation('org.springframework.boot:spring-boot-starter-validation')
 }
 
 test {
