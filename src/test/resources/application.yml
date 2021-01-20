@@ -4,8 +4,8 @@ spring:
       enabled: always
   # PMS Datasource
   datasource:
-    jdbc-url: ${DB_PMS_URL}
-    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:h2:mem:testdb1
+    driver-class-name: org.h2.Driver
 
   jpa:
     database: default
@@ -20,7 +20,7 @@ logging:
 
 dms:
   datasource:
-    jdbc-url: ${DB_DMS_URL}
-    username: ${DB_DMS_USERNAME:root}
-    password: ${DB_DMS_PASSWORD:}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:h2:mem:testdb2
+    username: aaa
+    password: aaa
+    driver-class-name: org.h2.Driver
