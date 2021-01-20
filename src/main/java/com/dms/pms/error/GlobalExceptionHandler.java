@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("HandleMethodArgumentNotValidException: ", e);
+        log.warn("HandleMethodArgumentNotValidException: ", e);
         return new ResponseEntity<>(new ErrorResponse(ErrorCode.BAD_REQUEST.getStatus(),
                 ErrorCode.BAD_REQUEST.getMessage()), HttpStatus.valueOf(ErrorCode.BAD_REQUEST.getStatus()));
     }
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         final ErrorCode errorCode = e.getErrorCode();
-        log.error("BusinessException: ", e);
+        log.warn("BusinessException: ", e);
 
         return new ResponseEntity<>(new ErrorResponse(errorCode.getStatus(), errorCode.getMessage()),
                 HttpStatus.valueOf(errorCode.getStatus()));

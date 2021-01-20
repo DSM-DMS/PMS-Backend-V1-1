@@ -7,4 +7,9 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - log: ${LOCAL_LOGGING_PATH}
+      - log:${LOCAL_LOGGING_PATH}
+    environment:
+      - DB_PMS_URL=${DB_PMS_URL}
+      - DB_DMS_URL=${DB_DMS_URL}
+      - DB_DMS_USERNAME=${DB_DMS_USERNAME}
+      - DB_DMS_PASSWORD=${DB_DMS_PASSWORD}
