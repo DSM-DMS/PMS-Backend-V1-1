@@ -1,6 +1,5 @@
 package com.dms.pms.domain.user;
 
-import com.dms.pms.controller.UserController;
 import com.dms.pms.domain.AbstractControllerTest;
 import com.dms.pms.entity.pms.user.Parent;
 import com.dms.pms.entity.pms.user.ParentRepository;
@@ -19,15 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ParentControllerTest extends AbstractControllerTest {
     @Autowired
-    private UserController userController;
-
-    @Autowired
     private ParentRepository parentRepository;
-
-    @Override
-    protected Object controller() {
-        return userController;
-    }
 
     @BeforeEach
     public void setup() {
