@@ -1,6 +1,8 @@
 buildscript {
-    dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
     }
 }
 
@@ -8,6 +10,7 @@ plugins {
     id 'org.springframework.boot' version '2.4.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'com.github.nbaztec.coveralls-jacoco' version '1.2.5'
 }
 
 group = 'com.dms'
@@ -26,7 +29,6 @@ repositories {
 }
 
 // For coveralls
-apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'jacoco'
 
 dependencies {
@@ -62,4 +64,14 @@ jacocoTestReport {
         xml.enabled = true // coveralls plugin depends on xml format report
         html.enabled = true
     }
+}
+
+coverallsJacoco {
+    reportPath = "" // default: "build/reports/jacoco/test/jacocoTestReport.xml"
+
+    reportSourceSets += sourceSets.foo.allJava.srcDirs + sourceSets.bar.allJava.srcDirs // default: main
+    apiEndpoint = "" // default: https://coveralls.io/api/v1/jobs
+
+    dryRun = false // default: false
+    coverallsRequest = File("build/req.json") // default: null
 }
