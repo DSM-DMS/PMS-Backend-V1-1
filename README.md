@@ -1,1 +1,1 @@
-PMS-Backend-V1
+![Github Action Status](https://github.com/DSM-DMS/PMS-Backend-V1-1/workflows/Java%20CI%20with%20Gradle/badge.svg)  [![Coverage Status](https://coveralls.io/repos/github/DSM-DMS/PMS-Backend-V1-1/badge.svg?branch=main)](https://coveralls.io/github/DSM-DMS/PMS-Backend-V1-1?branch=main)
