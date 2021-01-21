@@ -4,6 +4,7 @@ import com.dms.pms.entity.pms.user.Parent;
 import com.dms.pms.entity.pms.user.ParentRepository;
 import com.dms.pms.exception.UserAlreadyExistsException;
 import com.dms.pms.payload.request.RegisterRequest;
+import com.dms.pms.security.auth.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
+                .roleType(RoleType.USER)
                 .build()
         );
     }
