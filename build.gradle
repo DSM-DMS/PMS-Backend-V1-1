@@ -65,13 +65,3 @@ jacocoTestReport {
         html.enabled = true
     }
 }
-
-coverallsJacoco {
-    reportPath = "" // default: "build/reports/jacoco/test/jacocoTestReport.xml"
-
-    reportSourceSets += sourceSets.foo.allJava.srcDirs + sourceSets.bar.allJava.srcDirs // default: main
-    apiEndpoint = "" // default: https://coveralls.io/api/v1/jobs
-
-    dryRun = false // default: false
-    coverallsRequest = File("build/req.json") // default: null
-}
