@@ -1,7 +1,16 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.4.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'com.github.nbaztec.coveralls-jacoco' version '1.2.5'
 }
 
 group = 'com.dms'
@@ -18,6 +27,9 @@ configurations {
 repositories {
     mavenCentral()
 }
+
+// For coveralls
+apply plugin: 'jacoco'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -45,4 +57,11 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
