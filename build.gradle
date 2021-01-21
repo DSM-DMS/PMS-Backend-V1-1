@@ -1,7 +1,16 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.4.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'com.github.nbaztec.coveralls-jacoco' version '1.2.5'
 }
 
 group = 'com.dms'
@@ -19,19 +28,40 @@ repositories {
     mavenCentral()
 }
 
+// For coveralls
+apply plugin: 'jacoco'
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     // For testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'
+    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+        exclude module: 'junit'
+    }
     // Spring Security
     compile "org.springframework.boot:spring-boot-starter-security"
     // Swagger
     implementation "io.springfox:springfox-boot-starter:3.0.0"
+    // JPA
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    // PostgreSQL Driver
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
+    // Mysql Driver
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+    // Validation
+    implementation('org.springframework.boot:spring-boot-starter-validation')
 }
 
 test {
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
