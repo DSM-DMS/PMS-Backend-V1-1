@@ -24,3 +24,11 @@ dms:
     username: aaa
     password: aaa
     driver-class-name: org.h2.Driver
+
+auth:
+  jwt:
+    secret: secret
+    exp:
+      access: 111
+    header: abc
+    prefix: Awsdsa

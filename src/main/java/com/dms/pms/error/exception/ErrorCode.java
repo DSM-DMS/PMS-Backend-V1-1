@@ -10,6 +10,7 @@ import lombok.Getter;
 public enum ErrorCode {
     BAD_REQUEST(400, "Bad Request: Invalid Parameter."),
     UNAUTHORIZED(401, "UnAuthorized: Please check your authentication"),
+    INSUFFICIENT_USER_PERMISSIONS(403, "Forbidden: Insufficient user permissions."),
     USER_NOT_FOUND(404, "Not Found: Parent not found."),
     USER_DUPLICATION(409, "Conflict: User already exists.");
 

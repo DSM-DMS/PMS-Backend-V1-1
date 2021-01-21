@@ -53,6 +53,10 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
     // Validation
     implementation('org.springframework.boot:spring-boot-starter-validation')
+    // JJWT
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+    // Jackson(For JSON Object)
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
 }
 
 test {

@@ -5,9 +5,11 @@ import com.dms.pms.error.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 @Slf4j
 @ControllerAdvice
@@ -27,5 +29,13 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(new ErrorResponse(errorCode.getStatus(), errorCode.getMessage()),
                 HttpStatus.valueOf(errorCode.getStatus()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.warn("AccessDeniedException: ", e);
+
+        return new ResponseEntity<>(new ErrorResponse(ErrorCode.INSUFFICIENT_USER_PERMISSIONS.getStatus(),
+                ErrorCode.INSUFFICIENT_USER_PERMISSIONS.getMessage()), HttpStatus.valueOf(ErrorCode.INSUFFICIENT_USER_PERMISSIONS.getStatus()));
     }
 }

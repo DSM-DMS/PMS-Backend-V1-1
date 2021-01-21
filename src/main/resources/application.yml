@@ -24,3 +24,11 @@ dms:
     username: ${DB_DMS_USERNAME:root}
     password: ${DB_DMS_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+auth:
+  jwt:
+    secret: ${JWT_SECRET}
+    exp:
+      access: ${JWT_ACCESS_EXP}
+    header: ${JWT_HEADER}
+    prefix: ${JWT_PREFIX}
