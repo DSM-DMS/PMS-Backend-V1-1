@@ -13,6 +13,32 @@ spring:
     hibernate:
       ddl-auto: update
 
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            clientId: ${FACEBOOK_CLIENT_ID}
+            clientSecret: ${FACEBOOK_CLIENT_SECRET}
+            redirectUri: "http://localhost:8080/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
+            scope:
+              - email
+              - profile
+
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectUri: "http://localhost:8080/oauth2/callback/google" # Redirect Uri의 도메인은 추후에 변경 예정
+            scope:
+              - email
+              - profile
+
+          provider:
+            facebook:
+              authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+              tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+              userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified
+
 logging:
   file:
     path: log
@@ -32,3 +58,9 @@ auth:
       access: ${JWT_ACCESS_EXP}
     header: ${JWT_HEADER}
     prefix: ${JWT_PREFIX}
+
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect

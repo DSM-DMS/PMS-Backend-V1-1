@@ -33,6 +33,7 @@ apply plugin: 'jacoco'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -57,6 +58,8 @@ dependencies {
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
     // Jackson(For JSON Object)
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
+    // OAuth (For Social Login)
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 test {

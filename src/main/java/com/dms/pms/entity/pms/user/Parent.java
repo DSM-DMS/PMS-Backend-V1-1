@@ -18,7 +18,7 @@ public class Parent {
     @Id
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column(nullable = false)
@@ -28,7 +28,18 @@ public class Parent {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
+    @Column(name = "provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
+
+    @Column(name = "provider_id")
+    private String providerId;
+
     @Builder.Default
     @OneToMany(mappedBy = "parent")
     private Set<StudentUser> studentUsers = new HashSet<>();
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
