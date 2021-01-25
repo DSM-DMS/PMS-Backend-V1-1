@@ -32,9 +32,6 @@ public class Parent {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    @Column(name = "provider_id")
-    private String providerId;
-
     @Builder.Default
     @OneToMany(mappedBy = "parent")
     private Set<StudentUser> studentUsers = new HashSet<>();
