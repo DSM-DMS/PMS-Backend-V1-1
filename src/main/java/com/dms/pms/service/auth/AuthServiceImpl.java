@@ -1,5 +1,6 @@
 package com.dms.pms.service.auth;
 
+import com.dms.pms.entity.pms.user.AuthProvider;
 import com.dms.pms.entity.pms.user.ParentRepository;
 import com.dms.pms.exception.LoginFailedException;
 import com.dms.pms.payload.request.LoginRequest;
@@ -20,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponse login(LoginRequest request) {
         return parentRepository.findById(request.getEmail())
+                .filter(user -> user.getAuthProvider().equals(AuthProvider.local))
                 .filter(user -> passwordEncoder.matches(request.getPassword(), user.getPassword()))
                 .map(user -> jwtTokenProvider.generateAccessToken(user.getEmail(), user.getRoleType()))
                 .map(TokenResponse::new)
