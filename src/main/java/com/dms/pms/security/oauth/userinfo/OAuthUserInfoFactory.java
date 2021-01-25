@@ -11,6 +11,8 @@ public class OAuthUserInfoFactory {
             return new FacebookOAuth2UserInfo(attributes);
         } else if (registrationId.equalsIgnoreCase(AuthProvider.google.toString())) {
             return new GoogleOAuth2UserInfo(attributes);
+        } else if (registrationId.equalsIgnoreCase(AuthProvider.naver.toString())) {
+            return new NaverOAuth2UserInfo(attributes);
         }
         else {
             throw new OAuth2AuthenticationFailedException();
