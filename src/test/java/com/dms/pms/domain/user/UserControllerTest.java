@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ParentControllerTest extends AbstractControllerTest {
+public class UserControllerTest extends AbstractControllerTest {
     @Autowired
     private ParentRepository parentRepository;
 
