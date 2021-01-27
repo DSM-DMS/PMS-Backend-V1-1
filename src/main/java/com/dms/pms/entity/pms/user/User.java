@@ -1,6 +1,6 @@
 package com.dms.pms.entity.pms.user;
 
-import com.dms.pms.entity.pms.student_user.StudentUser;
+import com.dms.pms.entity.pms.student.Student;
 import com.dms.pms.security.auth.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +12,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "parent")
+@Table(name = "users")
 @AllArgsConstructor @NoArgsConstructor @Builder @Getter
-public class Parent {
+public class User {
     @Id
     private String email;
 
@@ -33,10 +33,18 @@ public class Parent {
     private AuthProvider authProvider;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent")
-    private Set<StudentUser> studentUsers = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "StudentUser", joinColumns = @JoinColumn(name = "email"), inverseJoinColumns = @JoinColumn(name = "student_code"))
+    private Set<Student> students = new HashSet<>();
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User addStudent(Student student) {
+        students.add(student);
+        student.getUsers().add(this);
+
+        return this;
     }
 }

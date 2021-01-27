@@ -1,6 +1,6 @@
 package com.dms.pms.security.auth;
 
-import com.dms.pms.entity.pms.user.Parent;
+import com.dms.pms.entity.pms.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,18 +10,18 @@ import java.util.*;
 
 public class AuthDetails implements UserDetails, OAuth2User {
 
-    AuthDetails(Parent parent, RoleType roleType) {
-        this.parent = parent;
+    AuthDetails(User user, RoleType roleType) {
+        this.user = user;
         authorities.add(new SimpleGrantedAuthority(roleType.toString()));
     }
 
-    public AuthDetails(Parent parent, Map<String, Object> attributes) {
-        this.parent = parent;
+    public AuthDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
         this.authorities.add(new SimpleGrantedAuthority(RoleType.USER.toString()));     // 소셜 유저는 어드민 권한을 가질 수 없음.
         this.attributes = attributes;
     }
 
-    private Parent parent;
+    private User user;
     private List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     private Map<String, Object> attributes = new HashMap<>();
 
@@ -37,12 +37,12 @@ public class AuthDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return parent.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return parent.getEmail();
+        return user.getEmail();
     }
 
     @Override
@@ -67,6 +67,6 @@ public class AuthDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return parent.getName();
+        return user.getName();
     }
 }

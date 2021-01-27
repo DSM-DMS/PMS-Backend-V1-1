@@ -1,7 +1,9 @@
 package com.dms.pms.entity.pms.student;
 
-import com.dms.pms.entity.pms.student_user.StudentUser;
+import com.dms.pms.entity.pms.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,14 +11,20 @@ import java.util.Set;
 
 @Entity
 @Table(name = "student")
-@Getter
+@Getter @NoArgsConstructor @AllArgsConstructor
 public class Student {
-    @Id
+    @Id @Column(name = "student_code")
     private Integer studentCode;
 
     @Column(nullable = false)
     private String studentId;
 
-    @OneToMany(mappedBy = "student")
-    private Set<StudentUser> studentUsers = new HashSet<>();
+    @ManyToMany(mappedBy = "students")
+    private Set<User> users = new HashSet<>();
+
+    // For testing
+    public Student(Integer studentCode, String studentId) {
+        this.studentCode = studentCode;
+        this.studentId = studentId;
+    }
 }

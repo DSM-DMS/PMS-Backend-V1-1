@@ -1,6 +1,7 @@
 package com.dms.pms.controller;
 
 import com.dms.pms.payload.request.RegisterRequest;
+import com.dms.pms.payload.request.StudentAdditionRequest;
 import com.dms.pms.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,5 +30,18 @@ public class UserController {
     @PostMapping
     public void register(@RequestBody @Valid RegisterRequest request) {
         userService.register(request);
+    }
+
+    @ApiOperation(value = "학생 등록 API", notes = "성공 시 상태 코드 201 반환.")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "요청이 성공적으로 수행됨."),
+            @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
+            @ApiResponse(code = 401, message = "인증 정보가 유효하지 않음."),
+            @ApiResponse(code = 404, message = "해당하는 학생 정보가 없음.")
+    })
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/student")
+    public void addStudent(@RequestBody @Valid StudentAdditionRequest request) {
+        userService.addStudent(request);
     }
 }

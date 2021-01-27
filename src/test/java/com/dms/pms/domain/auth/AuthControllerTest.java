@@ -2,8 +2,8 @@ package com.dms.pms.domain.auth;
 
 import com.dms.pms.domain.AbstractControllerTest;
 import com.dms.pms.entity.pms.user.AuthProvider;
-import com.dms.pms.entity.pms.user.Parent;
-import com.dms.pms.entity.pms.user.ParentRepository;
+import com.dms.pms.entity.pms.user.User;
+import com.dms.pms.entity.pms.user.UserRepository;
 import com.dms.pms.payload.request.LoginRequest;
 import com.dms.pms.security.auth.RoleType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,15 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private ParentRepository parentRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setup() {
-        parentRepository.save(
-                Parent.builder()
+        userRepository.save(
+                User.builder()
                 .email("user@gmail.com")
                 .password(passwordEncoder.encode("11111111"))
                 .name("user")
@@ -39,8 +39,8 @@ public class AuthControllerTest extends AbstractControllerTest {
                 .build()
         );
 
-        parentRepository.save(
-                Parent.builder()
+        userRepository.save(
+                User.builder()
                 .email("admin@gmail.com")
                 .password(passwordEncoder.encode("11111111"))
                 .name("admin")
@@ -52,7 +52,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @AfterEach
     public void after() {
-        parentRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
