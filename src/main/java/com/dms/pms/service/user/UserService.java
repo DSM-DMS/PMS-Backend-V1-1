@@ -1,4 +1,4 @@
-package com.dms.pms.service;
+package com.dms.pms.service.user;
 
 import com.dms.pms.payload.request.RegisterRequest;
 

@@ -1,7 +1,7 @@
 package com.dms.pms.controller;
 
 import com.dms.pms.payload.request.RegisterRequest;
-import com.dms.pms.service.UserService;
+import com.dms.pms.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
