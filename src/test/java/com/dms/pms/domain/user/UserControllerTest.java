@@ -1,9 +1,15 @@
 package com.dms.pms.domain.user;
 
 import com.dms.pms.domain.AbstractControllerTest;
-import com.dms.pms.entity.pms.user.Parent;
-import com.dms.pms.entity.pms.user.ParentRepository;
+import com.dms.pms.entity.pms.student.Student;
+import com.dms.pms.entity.pms.student.StudentRepository;
+import com.dms.pms.entity.pms.user.AuthProvider;
+import com.dms.pms.entity.pms.user.User;
+import com.dms.pms.entity.pms.user.UserRepository;
 import com.dms.pms.payload.request.RegisterRequest;
+import com.dms.pms.payload.request.StudentAdditionRequest;
+import com.dms.pms.security.JwtTokenProvider;
+import com.dms.pms.security.auth.RoleType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,22 +24,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class UserControllerTest extends AbstractControllerTest {
     @Autowired
-    private ParentRepository parentRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    private String token;
 
     @BeforeEach
     public void setup() {
-        parentRepository.save(
-                Parent.builder()
+        userRepository.save(
+                User.builder()
                 .email("conflict@gmail.com")
                 .password("11111111")
+                .roleType(RoleType.USER)
+                .authProvider(AuthProvider.local)
                 .name("conflict")
                 .build()
         );
+
+        studentRepository.save(new Student(111111, "studentId"));
+
+        token = jwtTokenProvider.generateAccessToken("conflict@gmail.com", RoleType.USER);
     }
 
     @AfterEach
     public void after() {
-        parentRepository.deleteAll();
+        userRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test
@@ -72,6 +93,59 @@ public class UserControllerTest extends AbstractControllerTest {
                 .content(new ObjectMapper().writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
+                .andDo(print());
+    }
+
+    // Student Test Code
+
+    @Test
+    @DisplayName("Student Addition Test")
+    public void addStudent() throws Exception {
+        StudentAdditionRequest request = new StudentAdditionRequest(111111);
+
+        mockMvc.perform(post("/user/student")
+            .header("abc", "Awsdsa " + token)
+            .content(new ObjectMapper().writeValueAsString(request))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated())
+            .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Student Addition Test with Bad Request")
+    public void addStudentWithBadRequest() throws Exception {
+        StudentAdditionRequest request = new StudentAdditionRequest();
+
+        mockMvc.perform(post("/user/student")
+                .header("abc", "Awsdsa " + token)
+                .content(new ObjectMapper().writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Student Addition Test with Unauthorized")
+    public void addStudentWithUnauthorized() throws Exception {
+        StudentAdditionRequest request = new StudentAdditionRequest(111111);
+
+        mockMvc.perform(post("/user/student")
+            .content(new ObjectMapper().writeValueAsString(request))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized())
+            .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Student Addition Test with Not found")
+    public void addStudentWithNotFound() throws Exception {
+        StudentAdditionRequest request = new StudentAdditionRequest(123456);
+
+        mockMvc.perform(post("/user/student")
+                .header("abc", "Awsdsa " + token)
+                .content(new ObjectMapper().writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }

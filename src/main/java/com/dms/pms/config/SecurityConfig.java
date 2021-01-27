@@ -2,6 +2,7 @@ package com.dms.pms.config;
 
 import com.dms.pms.security.JwtConfigurer;
 import com.dms.pms.security.JwtTokenProvider;
+import com.dms.pms.security.auth.RoleType;
 import com.dms.pms.security.oauth.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,10 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .formLogin().disable()
+                .httpBasic().and()
                 .authorizeRequests()
                 .antMatchers("/auth").permitAll()
+                .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/user").permitAll()
-                .antMatchers(HttpMethod.POST, "/notice").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/user/student").hasAuthority(RoleType.USER.toString())
                 // Swagger
                 .antMatchers("/swagger-ui/").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
