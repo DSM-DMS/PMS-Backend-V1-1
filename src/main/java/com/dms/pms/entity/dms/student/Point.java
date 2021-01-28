@@ -11,18 +11,18 @@ import javax.persistence.Table;
 @Table(name = "point_status")
 @Getter
 public class Point {
-    @Id
+    @Id @Column(name = "student_id")
     private String studentId;
 
-    @Column(length = 11)
+    @Column(length = 11, name = "good_point")
     private Integer goodPoint;
 
-    @Column(length = 11)
+    @Column(length = 11, name = "bad_point")
     private Integer badPoint;
 
-    @Column(length = 11)
+    @Column(length = 11, name = "penalty_level")
     private Integer penaltyLevel;
 
-    @Column
+    @Column(name = "penalty_status")
     private boolean penaltyStatus;
 }
