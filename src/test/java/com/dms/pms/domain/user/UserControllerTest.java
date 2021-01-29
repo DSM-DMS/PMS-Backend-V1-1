@@ -148,4 +148,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("")
 }

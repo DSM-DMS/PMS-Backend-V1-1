@@ -6,7 +6,7 @@ import com.dms.pms.security.auth.RoleType;
 import com.dms.pms.security.oauth.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/user").hasAuthority(RoleType.USER.toString())
                 .antMatchers(HttpMethod.POST, "/user").permitAll()
+                .antMatchers(HttpMethod.POST, "/student/**").hasAuthority(RoleType.ADMIN.toString())
                 .antMatchers("/user/student").hasAuthority(RoleType.USER.toString())
                 // Swagger
                 .antMatchers("/swagger-ui/").permitAll()
@@ -88,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             @Value("${spring.security.oauth2.client.registration.google.redirectUri}") String googleRedirectUri,
             @Value("${spring.security.oauth2.client.registration.facebook.clientId}") String facebookClientId,
             @Value("${spring.security.oauth2.client.registration.facebook.clientSecret}") String facebookClientSecret,
-            @Value("${spring.security.oauth2.client.registration.google.redirectUri}") String facebookRedirectUri,
+            @Value("${spring.security.oauth2.client.registration.facebook.redirectUri}") String facebookRedirectUri,
             @Value("${spring.security.oauth2.client.registration.naver.clientId}") String naverClientId,
             @Value("${spring.security.oauth2.client.registration.naver.clientSecret}") String naverClientSecret
     ) {
@@ -104,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         registrations.add(CommonOAuth2Provider.FACEBOOK.getBuilder("facebook")
                 .clientId(facebookClientId)
                 .clientSecret(facebookClientSecret)
-                .redirectUri(googleRedirectUri)
+                .redirectUri(facebookRedirectUri)
                 .build()
         );
 

@@ -4,6 +4,8 @@ import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
 import com.dms.pms.payload.response.StudentListResponse;
+import com.dms.pms.payload.response.StudentOutingListResponse;
+import com.dms.pms.payload.response.StudentPointListResponse;
 import com.dms.pms.service.user.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +65,31 @@ public class UserController {
             @ApiResponse(code = 404, message = "해당하는 학생 정보가 없음.")
     })
     @GetMapping("/student/{number}")
-    public StudentInformationResponse getStudentInfo(@ApiParam(value = "학생 인증번호", example = "<studentNumber>") @PathVariable("number") Integer number) {
+    public StudentInformationResponse getStudentInfo(@ApiParam(value = "학생 학번", example = "<studentNumber>") @PathVariable("number") Integer number) {
         return userService.getStudentInfo(number);
+    }
+
+    @ApiOperation(value = "학생 상벌점 내역 조회 API", notes = "상벌점 사유, 점수, 날짜가 있는 객체를 리스트에 담아서 반환.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청이 성공적으로 수행됨."),
+            @ApiResponse(code = 401, message = "인증 정보가 유효하지 않음."),
+            @ApiResponse(code = 403, message = "해당하는 학생에 대한 접근 권한 없음."),
+            @ApiResponse(code = 404, message = "해당하는 학생 정보가 없음.")
+    })
+    @GetMapping("/student/point/{number}")
+    public StudentPointListResponse getStudentPoint(@ApiParam(value = "학생 학번", example = "<studentNumber>") @PathVariable("number") Integer number) {
+        return userService.getStudentPoint(number);
+    }
+
+    @ApiOperation(value = "학생 외출 내역 조회 API", notes = "날짜, 사유, 장소가 있는 객체를 리스트에 담아서 반환.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청이 성공적으로 수행됨."),
+            @ApiResponse(code = 401, message = "인증 정보가 유효하지 않음."),
+            @ApiResponse(code = 403, message = "해당하는 학생에 대한 접근 권한 없음."),
+            @ApiResponse(code = 404, message = "해당하는 학생 정보가 없음.")
+    })
+    @GetMapping("/student/outing/{number}")
+    public StudentOutingListResponse getStudentOuting(@ApiParam(value = "학생 학번", example = "<studentNumber>") @PathVariable("number") Integer number) {
+        return userService.getStudentOuting(number);
     }
 }

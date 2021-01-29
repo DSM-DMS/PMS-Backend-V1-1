@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentListResponse {
+    @ApiModelProperty(example = "<유저 이름>", value = "유저 이름")
+    @JsonProperty("name")
+    private String name;
+
     @JsonProperty("students")
     private List<Student> students = new ArrayList<>();
+
+    public void setName(String name) { this.name = name; }
 
     public void addStudent(Student student) {
         students.add(student);

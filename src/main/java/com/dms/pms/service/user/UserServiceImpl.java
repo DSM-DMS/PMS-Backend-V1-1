@@ -1,20 +1,22 @@
 package com.dms.pms.service.user;
 
+import com.dms.pms.entity.dms.point.history.PointHistoryRepository;
+import com.dms.pms.entity.dms.point.item.ItemRepository;
 import com.dms.pms.entity.dms.stay.StayRepository;
 import com.dms.pms.entity.dms.student.PointRepository;
 import com.dms.pms.entity.pms.meal.MealApplyRepository;
+import com.dms.pms.entity.pms.outing.OutingRepository;
 import com.dms.pms.entity.pms.student.StudentRepository;
 import com.dms.pms.entity.pms.user.AuthProvider;
 import com.dms.pms.entity.pms.user.User;
 import com.dms.pms.entity.pms.user.UserRepository;
-import com.dms.pms.exception.StudentNotFoundException;
-import com.dms.pms.exception.UserAlreadyExistsException;
-import com.dms.pms.exception.UserHasNotStudentException;
-import com.dms.pms.exception.UserNotFoundException;
+import com.dms.pms.exception.*;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
 import com.dms.pms.payload.response.StudentListResponse;
+import com.dms.pms.payload.response.StudentOutingListResponse;
+import com.dms.pms.payload.response.StudentPointListResponse;
 import com.dms.pms.security.auth.AuthenticationFacade;
 import com.dms.pms.security.auth.RoleType;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private final PointRepository pointRepository;
     private final StayRepository stayRepository;
     private final MealApplyRepository mealApplyRepository;
+    private final PointHistoryRepository pointHistoryRepository;
+    private final ItemRepository itemRepository;
+    private final OutingRepository outingRepository;
 
     @Override
     public void register(RegisterRequest request) {
@@ -102,11 +107,61 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(authenticationFacade.getUserEmail())
                 .map(user -> {
                     StudentListResponse response = new StudentListResponse();
+                    response.setName(user.getName());
+
                     user.getStudents()
                             .forEach(student -> response.addStudent(new StudentListResponse.Student(student.getStudentNumber(), student.getName())));
 
                     return response;
                 })
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public StudentPointListResponse getStudentPoint(Integer number) {
+        return studentRepository.findByStudentNumber(number)
+                .filter(student -> {
+                    User user = userRepository.findById(authenticationFacade.getUserEmail())
+                            .orElseThrow(UserNotFoundException::new);
+
+                    return student.getUsers().contains(user);
+                })
+                .map(student -> {
+                    StudentPointListResponse response = new StudentPointListResponse();
+
+                    pointHistoryRepository.findAllByStudentId(student.getStudentId())
+                            .forEach(pointHistory -> {
+                                itemRepository.findById(pointHistory.getPointId())
+                                        .map(item -> {
+                                            response.addPoint(new StudentPointListResponse.Point(item.getReason(), item.getPoint(), pointHistory.getDate(), item.isType()));
+                                            return item;
+                                        })
+                                        .orElseThrow(ItemNotFoundException::new);
+                            });
+                    return response;
+                })
+                .orElseThrow(UserHasNotStudentException::new);
+    }
+
+    @Override
+    public StudentOutingListResponse getStudentOuting(Integer number) {
+        return studentRepository.findByStudentNumber(number)
+                .filter(student -> {
+                    User user = userRepository.findById(authenticationFacade.getUserEmail())
+                            .orElseThrow(UserNotFoundException::new);
+
+                    return student.getUsers().contains(user);
+                })
+                .map(student -> {
+                    StudentOutingListResponse response = new StudentOutingListResponse();
+
+                    outingRepository.findAllByStudentNumber(student.getStudentNumber())
+                            .forEach(outing -> {
+                                response.addOuting(new StudentOutingListResponse.Outing(outing.getDate(), outing.getReason(), outing.getPlace(), outing.getType()));
+                            });
+
+                    return response;
+                })
+                .orElseThrow(UserHasNotStudentException::new);
     }
 }

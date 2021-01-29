@@ -1,6 +1,7 @@
 package com.dms.pms.controller;
 
 import com.dms.pms.payload.request.LoginRequest;
+import com.dms.pms.payload.request.PasswordChangeRequest;
 import com.dms.pms.payload.response.TokenResponse;
 import com.dms.pms.service.auth.AuthService;
 import io.swagger.annotations.Api;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,5 +30,17 @@ public class AuthController {
     @PostMapping
     public TokenResponse login(@RequestBody @Valid LoginRequest request) {
         return authService.login(request);
+    }
+
+    @ApiOperation(value = "비밀번호 변경 API", notes = "성공 시 201 반환.")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "비밀번호 변경이 성공적으로 수행됨."),
+            @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
+            @ApiResponse(code = 401, message = "비밀번호가 일치하지 않음 or 인증 정보가 유효하지 않음.")
+    })
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/password")
+    public void changePassword(@RequestBody @Valid PasswordChangeRequest request) {
+        authService.changePassword(request);
     }
 }
