@@ -3,6 +3,7 @@ package com.dms.pms.controller;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
+import com.dms.pms.payload.response.StudentListResponse;
 import com.dms.pms.service.user.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,17 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @ApiOperation(value = "등록한 학생 조회 API", notes = "등록한 학생 목록을 리스트로 반환.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청이 성공적으로 수행됨."),
+            @ApiResponse(code = 401, message = "인증 정보가 유효하지 않음.")
+    })
+    @GetMapping
+    public StudentListResponse getStudentList() {
+        return userService.getStudentList();
+    }
+
 
     @ApiOperation(value = "기본적인 회원가입 API", notes = "성공 시 상태 코드 201 반환.")
     @ApiResponses({

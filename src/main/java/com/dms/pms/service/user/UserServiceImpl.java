@@ -14,6 +14,7 @@ import com.dms.pms.exception.UserNotFoundException;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
+import com.dms.pms.payload.response.StudentListResponse;
 import com.dms.pms.security.auth.AuthenticationFacade;
 import com.dms.pms.security.auth.RoleType;
 import lombok.RequiredArgsConstructor;
@@ -94,5 +95,18 @@ public class UserServiceImpl implements UserService {
                     return response;
                 })
                 .orElseThrow(UserHasNotStudentException::new);
+    }
+
+    @Override
+    public StudentListResponse getStudentList() {
+        return userRepository.findById(authenticationFacade.getUserEmail())
+                .map(user -> {
+                    StudentListResponse response = new StudentListResponse();
+                    user.getStudents()
+                            .forEach(student -> response.addStudent(new StudentListResponse.Student(student.getStudentNumber(), student.getName())));
+
+                    return response;
+                })
+                .orElseThrow(UserNotFoundException::new);
     }
 }

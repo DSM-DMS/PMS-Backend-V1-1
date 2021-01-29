@@ -16,6 +16,9 @@ public class Student {
     @Id @Column(name = "student_code")
     private Integer studentCode;
 
+    @Column
+    private String name;
+
     @Column(nullable = false, unique = true, name = "student_id")
     private String studentId;
 
