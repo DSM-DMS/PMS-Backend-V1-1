@@ -11,6 +11,7 @@ import com.dms.pms.entity.pms.user.AuthProvider;
 import com.dms.pms.entity.pms.user.User;
 import com.dms.pms.entity.pms.user.UserRepository;
 import com.dms.pms.exception.*;
+import com.dms.pms.payload.request.ChangeNameRequest;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
@@ -54,6 +55,14 @@ public class UserServiceImpl implements UserService {
                 .authProvider(AuthProvider.local)
                 .build()
         );
+    }
+
+    @Override
+    public void changeName(ChangeNameRequest request) {
+        userRepository.findById(authenticationFacade.getUserEmail())
+                .map(user -> user.changeName(request.getName()))
+                .map(userRepository::save)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
