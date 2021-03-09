@@ -20,7 +20,7 @@ spring:
           facebook:
             clientId: ${FACEBOOK_CLIENT_ID}
             clientSecret: ${FACEBOOK_CLIENT_SECRET}
-            redirectUri: "http://52.231.93.45:8080/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
+            redirectUri: "http://${SERVER_IP}:8080/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
             scope:
               - email
               - profile
@@ -28,7 +28,7 @@ spring:
           google:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
-            redirectUri: "http://52.231.93.45:8080/oauth2/callback/google" # Redirect Uri의 도메인은 추후에 변경 예정
+            redirectUri: "http://${SERVER_IP}:8080/oauth2/callback/google" # Redirect Uri의 도메인은 추후에 변경 예정
             scope:
               - email
               - profile
