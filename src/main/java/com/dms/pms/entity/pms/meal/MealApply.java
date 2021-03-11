@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @AllArgsConstructor @NoArgsConstructor
 public class MealApply {
     @Id
-    private String email;
+    private String id;
 
     @Column(nullable = false)
     private boolean status;

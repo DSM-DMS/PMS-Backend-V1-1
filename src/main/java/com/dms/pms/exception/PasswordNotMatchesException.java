@@ -5,6 +5,6 @@ import com.dms.pms.error.exception.ErrorCode;
 
 public class PasswordNotMatchesException extends BusinessException {
     public PasswordNotMatchesException() {
-        super("Password is not matched!!", ErrorCode.UNAUTHORIZED);
+        super("Password is not matched!!", ErrorCode.INSUFFICIENT_USER_PERMISSIONS);
     }
 }
