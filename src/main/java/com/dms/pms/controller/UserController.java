@@ -41,6 +41,7 @@ public class UserController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public void register(@RequestBody @Valid RegisterRequest request) {
         userService.register(request);
     }
