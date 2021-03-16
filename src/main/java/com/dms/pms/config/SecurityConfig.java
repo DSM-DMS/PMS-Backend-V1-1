@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/user").hasAuthority(RoleType.USER.toString())
                 .antMatchers(HttpMethod.POST, "/user").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/user").permitAll()
                 .antMatchers(HttpMethod.POST, "/student/**").hasAuthority(RoleType.ADMIN.toString())
                 .antMatchers("/user/student").hasAuthority(RoleType.USER.toString())
                 // Swagger
