@@ -3,6 +3,7 @@ package com.dms.pms.controller;
 import com.dms.pms.payload.request.ChangeNameRequest;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
+import com.dms.pms.payload.request.StudentDeleteRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
 import com.dms.pms.payload.response.StudentListResponse;
 import com.dms.pms.payload.response.StudentOutingListResponse;
@@ -68,6 +69,11 @@ public class UserController {
     @PostMapping("/student")
     public void addStudent(@RequestBody @Valid StudentAdditionRequest request) {
         userService.addStudent(request);
+    }
+
+    @DeleteMapping("/student")
+    public void deleteStudent(@RequestBody @Valid StudentDeleteRequest request) {
+        userService.deleteStudent(request);
     }
 
     @ApiOperation(value = "학생 기본 정보(상벌점 수치, 잔류 상태, 주말 급식 신청 여부) 조회 API", notes = "상벌점 수치, 잔류 상태, 주말 급식 신청 여부 반환.")

@@ -14,6 +14,7 @@ import com.dms.pms.exception.*;
 import com.dms.pms.payload.request.ChangeNameRequest;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
+import com.dms.pms.payload.request.StudentDeleteRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
 import com.dms.pms.payload.response.StudentListResponse;
 import com.dms.pms.payload.response.StudentOutingListResponse;
@@ -48,12 +49,12 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(
                 User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .name(request.getName())
-                .roleType(RoleType.USER)
-                .authProvider(AuthProvider.local)
-                .build()
+                        .email(request.getEmail())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .name(request.getName())
+                        .roleType(RoleType.USER)
+                        .authProvider(AuthProvider.local)
+                        .build()
         );
     }
 
@@ -172,5 +173,17 @@ public class UserServiceImpl implements UserService {
                     return response;
                 })
                 .orElseThrow(UserHasNotStudentException::new);
+    }
+
+    @Override
+    public void deleteStudent(StudentDeleteRequest request) {
+        studentRepository.findByStudentNumber(request.getNumber())
+                .map(student -> {
+                    User user = userRepository.findById(authenticationFacade.getUserEmail())
+                            .orElseThrow(UserNotFoundException::new);
+                    studentRepository.delete(student);
+                    return student.getUsers().remove(user);
+                })
+                .orElseThrow(StudentNotFoundException::new);
     }
 }
