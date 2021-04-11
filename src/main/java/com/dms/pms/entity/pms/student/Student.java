@@ -16,8 +16,14 @@ public class Student {
     @Id @Column(name = "student_code")
     private Integer studentCode;
 
-    @Column(nullable = false)
+    @Column
+    private String name;
+
+    @Column(nullable = false, unique = true, name = "student_id")
     private String studentId;
+
+    @Column(nullable = false, unique = true, name = "number")
+    private Integer studentNumber;
 
     @ManyToMany(mappedBy = "students")
     private Set<User> users = new HashSet<>();

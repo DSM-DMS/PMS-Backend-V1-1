@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@AllArgsConstructor @NoArgsConstructor @Getter
-public class StudentAdditionRequest {
-    @ApiModelProperty(example = "<studentNumber>", value = "학생 인증번호")
+@Getter
+@AllArgsConstructor @NoArgsConstructor
+public class ChangeNameRequest {
+    @ApiModelProperty(example = "<바꿀 닉네임>")
     @NotNull
-    private Integer number;
+    private String name;
 }

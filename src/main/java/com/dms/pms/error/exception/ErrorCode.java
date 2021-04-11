@@ -12,6 +12,7 @@ public enum ErrorCode {
     UNAUTHORIZED(401, "UnAuthorized: Please check your authentication"),
     INSUFFICIENT_USER_PERMISSIONS(403, "Forbidden: Insufficient user permissions."),
     USER_NOT_FOUND(404, "Not Found: User not found."),
+    ITEM_NOT_FOUND(404, "Not Found: Point Item not found."),
     STUDENT_NOT_FOUND(404, "Not Found: Student not found."),
     USER_DUPLICATION(409, "Conflict: User already exists.");
 

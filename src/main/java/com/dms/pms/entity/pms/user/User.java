@@ -47,4 +47,14 @@ public class User {
 
         return this;
     }
+
+    public User changePassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public User changeName(String name) {
+        this.name = name;
+        return this;
+    }
 }
