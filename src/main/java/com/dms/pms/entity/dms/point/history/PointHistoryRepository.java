@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PointHistoryRepository extends JpaRepository<PointHistory, Integer> {
-    public List<PointHistory> findAllByStudentId(String studentId);
+    public List<PointHistory> findAllByStudentIdOrderByDateDesc(String studentId);
 }
