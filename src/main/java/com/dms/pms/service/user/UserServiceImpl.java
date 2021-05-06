@@ -181,8 +181,12 @@ public class UserServiceImpl implements UserService {
                 .map(student -> {
                     User user = userRepository.findById(authenticationFacade.getUserEmail())
                             .orElseThrow(UserNotFoundException::new);
-                    studentRepository.delete(student);
-                    return student.getUsers().remove(user);
+                    
+                    student.getUsers().remove(user);
+                    user.getStudents().remove(student);
+                    studentRepository.save(student);
+                    userRepository.save(user);
+                    return student;
                 })
                 .orElseThrow(StudentNotFoundException::new);
     }
