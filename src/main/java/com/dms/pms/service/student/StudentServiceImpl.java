@@ -7,6 +7,7 @@ import com.dms.pms.entity.pms.student.StudentRepository;
 import com.dms.pms.entity.pms.user.User;
 import com.dms.pms.exception.StudentNotFoundException;
 import com.dms.pms.payload.request.AddOutingRequest;
+import com.dms.pms.service.notification.NotificationService;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
@@ -25,6 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final OutingRepository outingRepository;
     private final StudentRepository studentRepository;
+    private final NotificationService notificationService;
 
     @Override
     public void addOuting(AddOutingRequest request) {
@@ -43,18 +45,18 @@ public class StudentServiceImpl implements StudentService {
 
         Set<User> users = student.getUsers();
 
-        users.forEach(receiver -> {
-                    Message message = Message.builder()
-                            .setToken("l")
-                            .setWebpushConfig(WebpushConfig.builder().putHeader("ttl", "300")
-                                    .setNotification(
-                                            new WebpushNotification(student.getName() + "님이 외출하였습니다.",
-                                                    "장소: " + request.getPlace()))
-                                    .build())
-                            .build();
+        users.forEach(receiver -> notificationService.getToken(receiver.getEmail()).forEach(user -> {
+            Message message = Message.builder()
+                    .setToken("")
+                    .setWebpushConfig(WebpushConfig.builder().putHeader("ttl", "300")
+                            .setNotification(
+                                    new WebpushNotification(student.getName() + "님이 외출하였습니다.",
+                                            "장소: " + request.getPlace()))
+                            .build())
+                    .build();
 
-                    String response = FirebaseMessaging.getInstance().sendAsync(message).get();
-                    log.info("Sent message: {}", response);
-                });
+            String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+            log.info("Sent message: {}", response);
+        }));
     }
 }
