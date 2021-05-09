@@ -12,6 +12,10 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
   security:
     oauth2:
@@ -46,7 +50,7 @@ spring:
 
 logging:
   file:
-    path: log
+    path: ./logs/spring/logfile.log
   level.com.dms.pms.error: ERROR
 
 dms:
