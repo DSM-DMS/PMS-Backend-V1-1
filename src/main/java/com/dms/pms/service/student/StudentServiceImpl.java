@@ -5,6 +5,8 @@ import com.dms.pms.entity.pms.outing.OutingRepository;
 import com.dms.pms.entity.pms.student.Student;
 import com.dms.pms.entity.pms.student.StudentRepository;
 import com.dms.pms.entity.pms.user.User;
+import com.dms.pms.error.exception.BusinessException;
+import com.dms.pms.error.exception.ErrorCode;
 import com.dms.pms.exception.StudentNotFoundException;
 import com.dms.pms.payload.request.AddOutingRequest;
 import com.dms.pms.service.notification.NotificationService;
@@ -54,9 +56,12 @@ public class StudentServiceImpl implements StudentService {
                                             "장소: " + request.getPlace()))
                             .build())
                     .build();
-
-            String response = FirebaseMessaging.getInstance().sendAsync(message).get();
-            log.info("Sent message: {}", response);
+            try {
+                String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+                log.info("Sent message: {}", response);
+            } catch (Exception e) {
+                throw new BusinessException("Failed to send push notification.", ErrorCode.ITEM_NOT_FOUND);
+            }
         }));
     }
 }
