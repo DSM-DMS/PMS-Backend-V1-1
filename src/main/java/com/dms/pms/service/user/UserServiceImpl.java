@@ -3,6 +3,7 @@ package com.dms.pms.service.user;
 import com.dms.pms.entity.dms.point.history.PointHistoryRepository;
 import com.dms.pms.entity.dms.point.item.ItemRepository;
 import com.dms.pms.entity.dms.stay.StayRepository;
+import com.dms.pms.payload.request.StudentDeleteRequest;
 import com.dms.pms.entity.dms.student.PointRepository;
 import com.dms.pms.entity.pms.meal.MealApplyRepository;
 import com.dms.pms.entity.pms.outing.OutingRepository;
@@ -14,7 +15,6 @@ import com.dms.pms.exception.*;
 import com.dms.pms.payload.request.ChangeNameRequest;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
-import com.dms.pms.payload.request.StudentDeleteRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
 import com.dms.pms.payload.response.StudentListResponse;
 import com.dms.pms.payload.response.StudentOutingListResponse;
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
                 .map(student -> {
                     StudentPointListResponse response = new StudentPointListResponse();
 
-                    pointHistoryRepository.findAllByStudentId(student.getStudentId())
+                    pointHistoryRepository.findAllByStudentIdOrderByDateDesc(student.getStudentId())
                             .forEach(pointHistory -> {
                                 itemRepository.findById(pointHistory.getPointId())
                                         .map(item -> {
@@ -181,8 +181,12 @@ public class UserServiceImpl implements UserService {
                 .map(student -> {
                     User user = userRepository.findById(authenticationFacade.getUserEmail())
                             .orElseThrow(UserNotFoundException::new);
-                    studentRepository.delete(student);
-                    return student.getUsers().remove(user);
+
+                    student.getUsers().remove(user);
+                    user.getStudents().remove(student);
+                    studentRepository.save(student);
+                    userRepository.save(user);
+                    return student;
                 })
                 .orElseThrow(StudentNotFoundException::new);
     }

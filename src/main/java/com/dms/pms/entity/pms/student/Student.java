@@ -29,8 +29,9 @@ public class Student {
     private Set<User> users = new HashSet<>();
 
     // For testing
-    public Student(Integer studentCode, String studentId) {
+    public Student(Integer studentCode, String studentId, Integer studentNumber) {
         this.studentCode = studentCode;
         this.studentId = studentId;
+        this.studentNumber = studentNumber;
     }
 }

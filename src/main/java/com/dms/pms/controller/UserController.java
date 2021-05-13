@@ -3,9 +3,9 @@ package com.dms.pms.controller;
 import com.dms.pms.payload.request.ChangeNameRequest;
 import com.dms.pms.payload.request.RegisterRequest;
 import com.dms.pms.payload.request.StudentAdditionRequest;
-import com.dms.pms.payload.request.StudentDeleteRequest;
 import com.dms.pms.payload.response.StudentInformationResponse;
 import com.dms.pms.payload.response.StudentListResponse;
+import com.dms.pms.payload.request.StudentDeleteRequest;
 import com.dms.pms.payload.response.StudentOutingListResponse;
 import com.dms.pms.payload.response.StudentPointListResponse;
 import com.dms.pms.service.user.UserService;
@@ -42,7 +42,6 @@ public class UserController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public void register(@RequestBody @Valid RegisterRequest request) {
         userService.register(request);
     }
@@ -70,7 +69,13 @@ public class UserController {
     public void addStudent(@RequestBody @Valid StudentAdditionRequest request) {
         userService.addStudent(request);
     }
-
+    @ApiOperation(value = "학생 삭제 API", notes = "성공 시 상태 코드 200 반환.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청이 성공적으로 수행됨."),
+            @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
+            @ApiResponse(code = 401, message = "인증 정보가 유효하지 않음."),
+            @ApiResponse(code = 404, message = "해당하는 학생 정보가 없음.")
+    })
     @DeleteMapping("/student")
     public void deleteStudent(@RequestBody @Valid StudentDeleteRequest request) {
         userService.deleteStudent(request);

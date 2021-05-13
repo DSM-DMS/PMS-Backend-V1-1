@@ -10,7 +10,7 @@ public enum CustomOAuth2Provider {
         public ClientRegistration.Builder getBuilder(String registrationId) {
             ClientRegistration.Builder builder = getBuilder(registrationId, ClientAuthenticationMethod.POST, "{baseUrl}/{action}/oauth2/code/{registrationId}").scope("profile")
                     .scope("name", "email")
-                    .redirectUri("http://52.231.93.45:8080/oauth2/callback/naver")
+                    .redirectUri("http://api.smooth-bear.live/oauth2/callback/naver")
                     .authorizationUri("https://nid.naver.com/oauth2.0/authorize")
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                     .tokenUri("https://nid.naver.com/oauth2.0/token")
