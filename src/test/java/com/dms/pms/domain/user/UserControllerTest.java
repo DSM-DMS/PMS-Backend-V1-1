@@ -46,7 +46,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .build()
         );
 
-        studentRepository.save(new Student(111111, "studentId"));
+        studentRepository.save(new Student(111111, "studentId", 1111));
 
         token = jwtTokenProvider.generateAccessToken("conflict@gmail.com", RoleType.USER);
     }
