@@ -13,7 +13,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final Map<String, List<String>> tokens = new HashMap<>();
 
     public void addToken(NotificationRequest request) {
-        List<String> tokenList =  tokens.get(request.getEmail());
+        List<String> tokenList = tokens.get(request.getEmail());
         if (tokenList == null) {
 
             tokenList = new ArrayList<>();
@@ -26,6 +26,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public List<String> getToken(String email) {
-        return tokens.get(email);
+        List<String> tokenList = tokens.get(email);
+        return tokenList != null ? tokenList : new ArrayList<>();
     }
 }
