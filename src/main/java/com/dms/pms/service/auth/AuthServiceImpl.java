@@ -37,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
         userRepository.findById(authenticationFacade.getUserEmail())
                 .filter(user -> passwordEncoder.matches(request.getPrePassword(), user.getPassword()))
                 .map(user -> user.changePassword(passwordEncoder.encode(request.getPassword())))
+                .map(userRepository::save)
                 .orElseThrow(PasswordNotMatchesException::new);
     }
 }
