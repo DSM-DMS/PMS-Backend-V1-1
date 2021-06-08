@@ -3,6 +3,7 @@ package com.dms.pms.security.oauth;
 import com.dms.pms.config.AppProperties;
 import com.dms.pms.error.exception.BusinessException;
 import com.dms.pms.error.exception.ErrorCode;
+import com.dms.pms.error.exception.RedirectURINotAuthorizedException;
 import com.dms.pms.security.JwtTokenProvider;
 import com.dms.pms.security.auth.RoleType;
 import com.dms.pms.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -49,7 +50,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .map(Cookie::getValue);
 
         if (redirectUrl.isPresent() && !isAuthorizedRedirectUri(redirectUrl.get())) {
-            throw new BusinessException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication", ErrorCode.BAD_REQUEST);
+            throw new RedirectURINotAuthorizedException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
         String targetUrl = redirectUrl.orElse(getDefaultTargetUrl());
