@@ -20,7 +20,7 @@ spring:
           facebook:
             clientId: facebook
             clientSecret: secret
-            redirectUri: "http://localhost:8080/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
+            redirectUri: "https://localhost:8080/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
             scope:
               - email
               - profile
