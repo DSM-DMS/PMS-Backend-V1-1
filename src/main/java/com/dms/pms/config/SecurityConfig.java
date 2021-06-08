@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/user").permitAll()
                 .antMatchers(HttpMethod.POST, "/student/**").hasAuthority(RoleType.ADMIN.toString())
                 .antMatchers("/user/student").hasAuthority(RoleType.USER.toString())
-                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/oauth2/**/**").permitAll()
                 // Swagger
                 .antMatchers("/swagger-ui/").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
+                .baseUri("/oauth2/authorize/*")
                 .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
                 .and()
                 .redirectionEndpoint()
