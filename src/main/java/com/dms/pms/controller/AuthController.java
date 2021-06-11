@@ -1,6 +1,7 @@
 package com.dms.pms.controller;
 
 import com.dms.pms.payload.request.LoginRequest;
+import com.dms.pms.payload.request.OAuthRequest;
 import com.dms.pms.payload.request.PasswordChangeRequest;
 import com.dms.pms.payload.response.TokenResponse;
 import com.dms.pms.service.auth.AuthService;
@@ -42,5 +43,16 @@ public class AuthController {
     @PutMapping("/password")
     public void changePassword(@RequestBody @Valid PasswordChangeRequest request) {
         authService.changePassword(request);
+    }
+
+    @ApiOperation(value = "OAuth 정보 등록 API", notes = "성공 시 access token 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OAuth를 통하여 회원가입 혹은 로그인이 정상적으로 수행되었고 토큰을 성공적으로 반환함."),
+            @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
+            @ApiResponse(code = 401, message = "OAuth token과 현재 있는 계정 정보의 oauth 제공자가 일치하지 않음.")
+    })
+    @PostMapping("/oauth")
+    public TokenResponse oauthLogin(@RequestBody @Valid OAuthRequest request) {
+        return authService.oauthLogin(request);
     }
 }

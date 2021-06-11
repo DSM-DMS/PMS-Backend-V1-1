@@ -10,6 +10,8 @@ import lombok.Getter;
 public enum ErrorCode {
     BAD_REQUEST(400, "Bad Request: Invalid Parameter."),
     UNAUTHORIZED(401, "UnAuthorized: Please check your authentication"),
+    PROVIDER_INVALID(401, "UnAuthorized: Provider is not matched."),
+    PROVIDER_USER_INVALID(401, "UnAuthorized: Provider user is invalid."),
     INSUFFICIENT_USER_PERMISSIONS(403, "Forbidden: Insufficient user permissions."),
     USER_NOT_FOUND(404, "Not Found: User not found."),
     ITEM_NOT_FOUND(404, "Not Found: Point Item not found."),
