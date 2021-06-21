@@ -1,9 +1,11 @@
 package com.dms.pms.service.auth;
 
 import com.dms.pms.entity.pms.user.AuthProvider;
+import com.dms.pms.entity.pms.user.User;
 import com.dms.pms.entity.pms.user.UserRepository;
 import com.dms.pms.exception.LoginFailedException;
 import com.dms.pms.exception.PasswordNotMatchesException;
+import com.dms.pms.exception.ProviderNotMatchException;
 import com.dms.pms.exception.ProviderUserInvalidException;
 import com.dms.pms.payload.request.LoginRequest;
 import com.dms.pms.payload.request.OAuthRequest;
@@ -40,6 +42,11 @@ public class AuthServiceImpl implements AuthService {
     public void changePassword(PasswordChangeRequest request) {
         userRepository.findById(authenticationFacade.getUserEmail())
                 .filter(user -> passwordEncoder.matches(request.getPrePassword(), user.getPassword()))
+                .map(user -> {
+                    if (!user.getAuthProvider().equals(AuthProvider.LOCAL))
+                        throw new ProviderNotMatchException();
+                    return user;
+                })
                 .map(user -> user.changePassword(passwordEncoder.encode(request.getPassword())))
                 .map(userRepository::save)
                 .orElseThrow(PasswordNotMatchesException::new);
@@ -47,10 +54,17 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse oauthLogin(OAuthRequest request) {
-        return oAuthProviderConnect.getUserInfo(request.getToken(), request.getProvider())
-                .map(user ->
-                        jwtTokenProvider.generateAccessToken(user.getEmail(), user.getRoleType()))
-                .map(TokenResponse::new)
-                .orElseThrow(ProviderUserInvalidException::new);
+        User requestUser = oAuthProviderConnect.getUserInfo(request.getToken(), request.getProvider());
+
+        User user = userRepository.findById(requestUser.getEmail())
+                .map(resultUser -> {
+                    if (!resultUser.getAuthProvider().equals(requestUser.getAuthProvider())) {
+                        throw new ProviderNotMatchException();
+                    }
+                    return resultUser;
+                })
+                .orElseGet(() -> userRepository.save(requestUser));
+
+        return new TokenResponse(jwtTokenProvider.generateAccessToken(user.getEmail(), user.getRoleType()));
     }
 }

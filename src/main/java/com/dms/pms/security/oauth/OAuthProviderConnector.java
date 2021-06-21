@@ -2,77 +2,90 @@ package com.dms.pms.security.oauth;
 
 import com.dms.pms.entity.pms.user.AuthProvider;
 import com.dms.pms.entity.pms.user.User;
-import com.dms.pms.exception.ProviderUserInvalidException;
+import com.dms.pms.exception.LoginFailedException;
+import com.dms.pms.exception.OAuthConnectException;
+import com.dms.pms.security.auth.RoleType;
+import com.dms.pms.security.oauth.dto.ResponseData;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class OAuthProviderConnector implements OAuthProviderConnect {
-
     @Override
-    public <T> Optional<T> getUserInfo(String token, AuthProvider type) {
-        Map<String, String> requestHeader = new HashMap<>();
-        int statusCode;
+    public User getUserInfo(String token, AuthProvider type) {
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setConnectTimeout(5000);
+        factory.setReadTimeout(5000);
+        RestTemplate restTemplate = new RestTemplate(factory);
 
-        requestHeader.put("Authorization", "Bearer " + token);
-        HttpURLConnection con = connect(type.getProviderUri());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/json");
 
-        try {
-            con.setRequestMethod("GET");
-            for (Map.Entry<String, String> header : requestHeader.entrySet()) {
-                con.setRequestProperty(header.getKey(), header.getValue());
+        switch (type) {
+            case NAVER: {
+                headers.add("Authorization", "Bearer " + token);
+                Map<String, Object> data = requestProvider(type, restTemplate, headers);
+
+                return User.builder()
+                        .email((String) data.get("email"))
+                        .name((String) data.get("nickname"))
+                        .roleType(RoleType.USER)
+                        .authProvider(type)
+                        .build();
             }
+            case FACEBOOK: {
+                type.replaceAccessToken(token);
+                Map<String, Object> data = requestProvider(type, restTemplate, headers);
 
-            statusCode = con.getResponseCode();
-        } catch(IOException e) {
-            throw new RuntimeException("API 요청과 응답 실패", e);
-        } finally {
-            con.disconnect();
-        }
+                return User.builder()
+                        .email((String) data.get("email"))
+                        .name((String) data.get("name"))
+                        .roleType(RoleType.USER)
+                        .authProvider(type)
+                        .build();
+            }
+            case KAKAO: {
+                Map<String, Object> data = requestProvider(type, restTemplate, headers);
 
-        if (statusCode != HttpURLConnection.HTTP_OK) {
-            return Optional.empty();
+                return User.builder()
+                        .email((String) data.get("email"))
+                        .name((String) data.get("nickname"))
+                        .roleType(RoleType.USER)
+                        .authProvider(type)
+                        .build();
+            }
+            default:
+                throw new LoginFailedException();
         }
     }
 
-    private HttpURLConnection connect(String apiUrl){
-        try {
-            URL url = new URL(apiUrl);
-            return (HttpURLConnection)url.openConnection();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
-        } catch (IOException e) {
-            throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
+    private Map<String, Object> requestProvider(AuthProvider type, RestTemplate restTemplate, HttpHeaders headers) {
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        ResponseData<Map<String, Object>> responseData =
+                restTemplate.exchange(
+                        type.getProviderUri(),
+                        HttpMethod.GET,
+                        entity,
+                        new ParameterizedTypeReference<ResponseData<Map<String, Object>>>() {
+                        }
+                ).getBody();
+
+        int statusCode = Integer.parseInt(responseData.getResponseCode());
+
+        if (statusCode == 401) {
+            throw new LoginFailedException();
+        } else if (statusCode != 200) {
+            throw new OAuthConnectException();
         }
-    }
 
-    private String readBody(InputStream body){
-        InputStreamReader streamReader = new InputStreamReader(body);
-
-
-        try (BufferedReader lineReader = new BufferedReader(streamReader)) {
-            StringBuilder responseBody = new StringBuilder();
-
-
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                responseBody.append(line);
-            }
-
-
-            return responseBody.toString();
-        } catch (IOException e) {
-            throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
-        }
+        return responseData.getResponse();
     }
 }

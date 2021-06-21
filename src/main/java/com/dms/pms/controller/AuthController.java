@@ -1,5 +1,7 @@
 package com.dms.pms.controller;
 
+import com.dms.pms.entity.pms.user.AuthProvider;
+import com.dms.pms.exception.ProviderNotPermittedException;
 import com.dms.pms.payload.request.LoginRequest;
 import com.dms.pms.payload.request.OAuthRequest;
 import com.dms.pms.payload.request.PasswordChangeRequest;
@@ -53,6 +55,9 @@ public class AuthController {
     })
     @PostMapping("/oauth")
     public TokenResponse oauthLogin(@RequestBody @Valid OAuthRequest request) {
+        if (request.getProvider().equals(AuthProvider.LOCAL))
+            throw new ProviderNotPermittedException();
+
         return authService.oauthLogin(request);
     }
 }
