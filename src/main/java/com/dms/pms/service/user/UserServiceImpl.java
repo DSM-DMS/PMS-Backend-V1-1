@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
                         .password(passwordEncoder.encode(request.getPassword()))
                         .name(request.getName())
                         .roleType(RoleType.USER)
-                        .authProvider(AuthProvider.local)
+                        .authProvider(AuthProvider.LOCAL)
                         .build()
         );
     }
@@ -69,11 +69,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addStudent(StudentAdditionRequest request) {
         userRepository.findById(authenticationFacade.getUserEmail())
-                .map(user -> {
-                    return studentRepository.findById(request.getNumber())
-                            .map(student -> userRepository.save(user.addStudent(student)))
-                            .orElseThrow(StudentNotFoundException::new);
-                })
+                .map(user -> studentRepository.findById(request.getNumber())
+                        .map(student -> userRepository.save(user.addStudent(student)))
+                        .orElseThrow(StudentNotFoundException::new))
                 .orElseThrow(UserNotFoundException::new);
     }
 

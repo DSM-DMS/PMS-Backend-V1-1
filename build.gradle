@@ -1,8 +1,15 @@
 buildscript {
+    ext {
+        springCloudVersion = '2020.0.3'
+    }
+
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
+    }
+
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -30,6 +37,12 @@ repositories {
 
 // For coveralls
 apply plugin: 'jacoco'
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -60,6 +73,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
     // Firebase admin sdk
     implementation 'com.google.firebase:firebase-admin:7.2.0'
+    // Cloud Feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
 
 test {

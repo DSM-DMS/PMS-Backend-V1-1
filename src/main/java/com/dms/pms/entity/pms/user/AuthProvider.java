@@ -16,5 +16,6 @@ public enum AuthProvider {
 
     public AuthProvider replaceAccessToken(String token) {
         this.providerUri =  providerUri.replace("{access_token}", token);
+        return this;
     }
 }

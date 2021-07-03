@@ -7,6 +7,7 @@ import com.dms.pms.exception.LoginFailedException;
 import com.dms.pms.exception.PasswordNotMatchesException;
 import com.dms.pms.exception.ProviderNotMatchException;
 import com.dms.pms.exception.ProviderUserInvalidException;
+import com.dms.pms.payload.request.AppleOAuthRequest;
 import com.dms.pms.payload.request.LoginRequest;
 import com.dms.pms.payload.request.OAuthRequest;
 import com.dms.pms.payload.request.PasswordChangeRequest;
@@ -66,5 +67,10 @@ public class AuthServiceImpl implements AuthService {
                 .orElseGet(() -> userRepository.save(requestUser));
 
         return new TokenResponse(jwtTokenProvider.generateAccessToken(user.getEmail(), user.getRoleType()));
+    }
+
+    @Override
+    public TokenResponse appleOAuthLogin(AppleOAuthRequest request) {
+
     }
 }

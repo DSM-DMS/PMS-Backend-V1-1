@@ -69,6 +69,7 @@ public class UserController {
     public void addStudent(@RequestBody @Valid StudentAdditionRequest request) {
         userService.addStudent(request);
     }
+
     @ApiOperation(value = "학생 삭제 API", notes = "성공 시 상태 코드 200 반환.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청이 성공적으로 수행됨."),

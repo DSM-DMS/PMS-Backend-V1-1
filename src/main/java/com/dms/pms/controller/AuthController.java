@@ -2,6 +2,7 @@ package com.dms.pms.controller;
 
 import com.dms.pms.entity.pms.user.AuthProvider;
 import com.dms.pms.exception.ProviderNotPermittedException;
+import com.dms.pms.payload.request.AppleOAuthRequest;
 import com.dms.pms.payload.request.LoginRequest;
 import com.dms.pms.payload.request.OAuthRequest;
 import com.dms.pms.payload.request.PasswordChangeRequest;
@@ -47,7 +48,7 @@ public class AuthController {
         authService.changePassword(request);
     }
 
-    @ApiOperation(value = "OAuth 정보 등록 API", notes = "성공 시 access token 반환")
+    @ApiOperation(value = "OAuth OAuth API", notes = "성공 시 access token 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OAuth를 통하여 회원가입 혹은 로그인이 정상적으로 수행되었고 토큰을 성공적으로 반환함."),
             @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
@@ -59,5 +60,16 @@ public class AuthController {
             throw new ProviderNotPermittedException();
 
         return authService.oauthLogin(request);
+    }
+
+    @ApiOperation(value = "Apple OAuth API", notes = "성공 시 access token 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OAuth를 통하여 회원가입 혹은 로그인이 정상적으로 수행되었고 토큰을 성공적으로 반환함."),
+            @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
+            @ApiResponse(code = 401, message = "OAuth token과 현재 있는 계정 정보의 oauth 제공자가 일치하지 않음.")
+    })
+    @PostMapping("/oauth/apple")
+    public TokenResponse appleOAuthLogin(@RequestBody @Valid AppleOAuthRequest request) {
+        return authService.appleOAuthLogin(request);
     }
 }
