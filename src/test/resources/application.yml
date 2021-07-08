@@ -7,6 +7,9 @@ spring:
     jdbc-url: jdbc:h2:mem:testdb1
     driver-class-name: org.h2.Driver
 
+  redis:
+    port: 6379
+
   jpa:
     database: default
     generate-ddl: true

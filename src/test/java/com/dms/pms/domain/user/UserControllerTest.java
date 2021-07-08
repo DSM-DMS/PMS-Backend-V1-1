@@ -41,7 +41,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .email("conflict@gmail.com")
                 .password("11111111")
                 .roleType(RoleType.USER)
-                .authProvider(AuthProvider.local)
+                .authProvider(AuthProvider.LOCAL)
                 .name("conflict")
                 .build()
         );
