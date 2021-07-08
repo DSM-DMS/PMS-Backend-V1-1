@@ -1,4 +1,4 @@
-package com.dms.pms.utils.api;
+package com.dms.pms.utils.api.client;
 
 import com.dms.pms.utils.api.dto.ApplePublicKeyResponse;
 import org.springframework.cloud.openfeign.FeignClient;
