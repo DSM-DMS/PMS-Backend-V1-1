@@ -1,22 +1,29 @@
 package com.dms.pms.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.data.redis.connection.RedisServer;
+import redis.embedded.RedisServer;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @TestConfiguration
-public class TestRedisConig {
-    @Value("${spring.redis.port}")
-    private int port;
+public class TestRedisConfig {
 
     private static RedisServer redisServer;
 
+    public TestRedisConfig(RedisProperties redisProperties) {
+        redisServer = new RedisServer(redisProperties.getPort());
+    }
+
     @PostConstruct
-    public void redisServer() {
-        if (redisServer == null) {
-            redisServer = new RedisServer(port);
-        }
+    public void startRedis() {
+        redisServer.start();
+    }
+
+    @PreDestroy
+    public void stopRedis() {
+        redisServer.stop();
     }
 }
