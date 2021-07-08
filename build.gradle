@@ -56,17 +56,17 @@ dependencies {
         exclude module: 'junit'
     }
     // Spring Security
-    compile "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-security"
     // Swagger
     implementation "io.springfox:springfox-boot-starter:3.0.0"
     // JPA
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // PostgreSQL Driver
     compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
     // Mysql Driver
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
     // Validation
-    implementation('org.springframework.boot:spring-boot-starter-validation')
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     // JJWT
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
     // Jackson(For JSON Object)
@@ -75,6 +75,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:7.2.0'
     // Cloud Feign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // Embedded Redis (For testing)
+    testImplementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 }
 
 test {
