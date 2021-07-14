@@ -1,5 +1,14 @@
 package com.dms.pms.entity.pms.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum AuthProvider {
-    facebook, google, apple, kakao, naver, local
+    FACEBOOK,
+    APPLE,
+    KAKAO,
+    NAVER,
+    LOCAL;
 }

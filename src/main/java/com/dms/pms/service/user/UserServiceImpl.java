@@ -24,6 +24,7 @@ import com.dms.pms.security.auth.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
                         .password(passwordEncoder.encode(request.getPassword()))
                         .name(request.getName())
                         .roleType(RoleType.USER)
-                        .authProvider(AuthProvider.local)
+                        .authProvider(AuthProvider.LOCAL)
                         .build()
         );
     }
@@ -69,15 +70,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addStudent(StudentAdditionRequest request) {
         userRepository.findById(authenticationFacade.getUserEmail())
-                .map(user -> {
-                    return studentRepository.findById(request.getNumber())
-                            .map(student -> userRepository.save(user.addStudent(student)))
-                            .orElseThrow(StudentNotFoundException::new);
-                })
+                .map(user -> studentRepository.findById(request.getNumber())
+                        .map(student -> userRepository.save(user.addStudent(student)))
+                        .orElseThrow(StudentNotFoundException::new))
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
+    @Transactional
     public StudentInformationResponse getStudentInfo(Integer number) {
         return studentRepository.findByStudentNumber(number)
                 .filter(student -> {
@@ -128,6 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public StudentPointListResponse getStudentPoint(Integer number) {
         return studentRepository.findByStudentNumber(number)
                 .filter(student -> {
@@ -154,6 +155,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public StudentOutingListResponse getStudentOuting(Integer number) {
         return studentRepository.findByStudentNumber(number)
                 .filter(student -> {

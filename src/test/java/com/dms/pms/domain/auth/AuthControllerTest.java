@@ -35,7 +35,7 @@ public class AuthControllerTest extends AbstractControllerTest {
                 .password(passwordEncoder.encode("11111111"))
                 .name("user")
                 .roleType(RoleType.USER)
-                .authProvider(AuthProvider.local)
+                .authProvider(AuthProvider.LOCAL)
                 .build()
         );
 
@@ -44,7 +44,7 @@ public class AuthControllerTest extends AbstractControllerTest {
                 .email("admin@gmail.com")
                 .password(passwordEncoder.encode("11111111"))
                 .name("admin")
-                .authProvider(AuthProvider.local)
+                .authProvider(AuthProvider.LOCAL)
                 .roleType(RoleType.ADMIN)
                 .build()
         );

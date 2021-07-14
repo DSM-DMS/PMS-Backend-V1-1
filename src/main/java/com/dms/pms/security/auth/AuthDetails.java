@@ -4,11 +4,10 @@ import com.dms.pms.entity.pms.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
-public class AuthDetails implements UserDetails, OAuth2User {
+public class AuthDetails implements UserDetails {
 
     AuthDetails(User user, RoleType roleType) {
         this.user = user;
@@ -24,11 +23,6 @@ public class AuthDetails implements UserDetails, OAuth2User {
     private User user;
     private List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     private Map<String, Object> attributes = new HashMap<>();
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -63,10 +57,5 @@ public class AuthDetails implements UserDetails, OAuth2User {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getName() {
-        return user.getName();
     }
 }

@@ -7,6 +7,10 @@ spring:
     jdbc-url: ${DB_PMS_URL}
     driver-class-name: org.postgresql.Driver
 
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
   jpa:
     database: default
     generate-ddl: true
@@ -17,33 +21,6 @@ spring:
         show_sql: true
         format_sql: true
 
-  security:
-    oauth2:
-      client:
-        registration:
-          facebook:
-            clientId: ${FACEBOOK_CLIENT_ID}
-            clientSecret: ${FACEBOOK_CLIENT_SECRET}
-            redirectUri: "https://${SERVER_IP}/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
-            scope:
-              - email
-              - profile
-
-          google:
-            clientId: ${GOOGLE_CLIENT_ID}
-            clientSecret: ${GOOGLE_CLIENT_SECRET}
-            redirectUri: "https://${SERVER_IP}/oauth2/callback/google" # Redirect Uri의 도메인은 추후에 변경 예정
-            scope:
-              - email
-              - profile
-
-          naver:
-            clientId: ${NAVER_CLIENT_ID}
-            clientSecret: ${NAVER_CLIENT_SECRET}
-
-          apple:
-            clientId: ${APPLE_CLIENT_ID}
-            clientSecret: ${APPLE_CLIENT_SECRET}
   main:
     allow-bean-definition-overriding: true
 
@@ -63,13 +40,11 @@ dms:
 auth:
   jwt:
     secret: ${JWT_SECRET}
-    exp:
-      access: ${JWT_ACCESS_EXP}
+    accessExp: ${JWT_ACCESS_EXP}
     header: ${JWT_HEADER}
     prefix: ${JWT_PREFIX}
 
-  oauth2:
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
-      - myandroidapp://oauth2/redirect
-      - myiosapp://oauth2/redirect
+  oauth:
+    apple:
+      keyId: ${APPLE_KEY_ID}
+      teamId: ${APPLE_TEAM_ID}

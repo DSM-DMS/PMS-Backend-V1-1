@@ -1,8 +1,15 @@
 buildscript {
+    ext {
+        springCloudVersion = '2020.0.3'
+    }
+
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
+    }
+
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -15,8 +22,10 @@ plugins {
 
 group = 'com.dms'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+apply plugin: 'jacoco'
 
 configurations {
     compileOnly {
@@ -28,8 +37,11 @@ repositories {
     mavenCentral()
 }
 
-// For coveralls
-apply plugin: 'jacoco'
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -39,33 +51,41 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     // For testing
     testImplementation 'com.h2database:h2'
-    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'junit'
     }
     // Spring Security
-    compile "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-security"
     // Swagger
     implementation "io.springfox:springfox-boot-starter:3.0.0"
     // JPA
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // PostgreSQL Driver
     compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
     // Mysql Driver
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
     // Validation
-    implementation('org.springframework.boot:spring-boot-starter-validation')
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     // JJWT
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
     // Jackson(For JSON Object)
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
-    // OAuth (For Social Login)
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // Firebase admin sdk
     implementation 'com.google.firebase:firebase-admin:7.2.0'
+    // Cloud Feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // Embedded Redis (For testing)
+    testImplementation 'it.ozimov:embedded-redis:0.7.2'
 }
 
 test {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion '0.8.7'
 }
 
 jacocoTestReport {

@@ -7,39 +7,15 @@ spring:
     jdbc-url: jdbc:h2:mem:testdb1
     driver-class-name: org.h2.Driver
 
+  redis:
+    port: 6379
+
   jpa:
     database: default
     generate-ddl: true
     hibernate:
       ddl-auto: update
 
-  security:
-    oauth2:
-      client:
-        registration:
-          facebook:
-            clientId: facebook
-            clientSecret: secret
-            redirectUri: "https://localhost:8080/oauth2/callback/facebook" # Redirect Uri의 도메인은 추후에 변경 예정
-            scope:
-              - email
-              - profile
-
-          google:
-            clientId: google
-            clientSecret: secret
-            redirectUri: "http://localhost:8080/oauth2/callback/google" # Redirect Uri의 도메인은 추후에 변경 예정
-            scope:
-              - email
-              - profile
-
-          naver:
-            clientId: naver
-            clientSecret: secret
-
-          apple:
-            clientId: apple
-            clientSecret: secret
   main:
     allow-bean-definition-overriding: true
 
@@ -57,14 +33,12 @@ dms:
 
 auth:
   jwt:
-    secret: secret
-    exp:
-      access: 111
+    secret: asdf
+    access-exp: 1110000
     header: abc
     prefix: Awsdsa
 
-  oauth2:
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
-      - myandroidapp://oauth2/redirect
-      - myiosapp://oauth2/redirect
+  oauth:
+    apple:
+      key-id: asda8sfdasf9as8dfas8d
+      team-id: asdjfwoieur8saldjflksadjf
