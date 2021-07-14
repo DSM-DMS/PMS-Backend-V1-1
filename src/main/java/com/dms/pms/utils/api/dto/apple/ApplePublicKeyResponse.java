@@ -1,4 +1,4 @@
-package com.dms.pms.utils.api.dto;
+package com.dms.pms.utils.api.dto.apple;
 
 import lombok.Getter;
 

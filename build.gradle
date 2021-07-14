@@ -52,7 +52,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     // For testing
     testImplementation 'com.h2database:h2'
-    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'junit'
     }
     // Spring Security
@@ -78,7 +78,7 @@ dependencies {
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // Embedded Redis (For testing)
-    testImplementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+    testImplementation 'it.ozimov:embedded-redis:0.7.2'
 }
 
 test {

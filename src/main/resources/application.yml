@@ -40,11 +40,11 @@ dms:
 auth:
   jwt:
     secret: ${JWT_SECRET}
-    exp:
-      access: ${JWT_ACCESS_EXP}
+    accessExp: ${JWT_ACCESS_EXP}
     header: ${JWT_HEADER}
     prefix: ${JWT_PREFIX}
 
-  oauth2:
-    url:
-      naver:
+  oauth:
+    apple:
+      keyId: ${APPLE_KEY_ID}
+      teamId: ${APPLE_TEAM_ID}

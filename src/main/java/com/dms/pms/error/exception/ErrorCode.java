@@ -19,7 +19,8 @@ public enum ErrorCode {
     STUDENT_NOT_FOUND(404, "Not Found: Student not found."),
     USER_DUPLICATION(409, "Conflict: User already exists."),
 
-    INTERNAL_SERVER_ERROR(500, "Internal Server Error: Something went wrong.");
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error: Something went wrong."),
+    FAILED_TO_CONNECT_APPLE_SERVER(500, "Internal Server Error: Failed to connect apple server.");
 
     private final int status;
     private final String message;

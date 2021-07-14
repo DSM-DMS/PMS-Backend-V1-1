@@ -2,12 +2,10 @@ package com.dms.pms.controller;
 
 import com.dms.pms.entity.pms.user.AuthProvider;
 import com.dms.pms.exception.ProviderNotPermittedException;
-import com.dms.pms.payload.request.AppleOAuthRequest;
-import com.dms.pms.payload.request.LoginRequest;
-import com.dms.pms.payload.request.OAuthRequest;
-import com.dms.pms.payload.request.PasswordChangeRequest;
+import com.dms.pms.payload.request.*;
 import com.dms.pms.payload.response.TokenResponse;
 import com.dms.pms.service.auth.AuthService;
+import com.dms.pms.utils.api.dto.apple.AppleToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -62,14 +60,24 @@ public class AuthController {
         return authService.oauthLogin(request);
     }
 
-    @ApiOperation(value = "Apple OAuth API", notes = "성공 시 access token 반환")
+    @ApiOperation(value = "Apple OAuth API", notes = "성공 시 apple access token, refresh token 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OAuth를 통하여 회원가입 혹은 로그인이 정상적으로 수행되었고 토큰을 성공적으로 반환함."),
+            @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
+    })
+    @PostMapping("/oauth/apple")
+    public AppleToken.Response appleOAuthLogin(@RequestBody @Valid AppleOAuthRequest request) {
+        return authService.appleOAuthLogin(request);
+    }
+
+    @ApiOperation(value = "Apple Login API", notes = "성공시 server access token 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OAuth를 통하여 회원가입 혹은 로그인이 정상적으로 수행되었고 토큰을 성공적으로 반환함."),
             @ApiResponse(code = 400, message = "잘못된 요청. 요청 값 확인."),
             @ApiResponse(code = 401, message = "OAuth token과 현재 있는 계정 정보의 oauth 제공자가 일치하지 않음.")
     })
-    @PostMapping("/oauth/apple")
-    public TokenResponse appleOAuthLogin(@RequestBody @Valid AppleOAuthRequest request) {
-        return authService.appleOAuthLogin(request);
+    @PostMapping("/oauth/apple/login")
+    public TokenResponse appleLogin(AppleSignRequest request) {
+        return authService.signInApple(request);
     }
 }

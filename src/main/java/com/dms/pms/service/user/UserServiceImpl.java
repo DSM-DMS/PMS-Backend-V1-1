@@ -24,6 +24,7 @@ import com.dms.pms.security.auth.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public StudentInformationResponse getStudentInfo(Integer number) {
         return studentRepository.findByStudentNumber(number)
                 .filter(student -> {
@@ -126,6 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public StudentPointListResponse getStudentPoint(Integer number) {
         return studentRepository.findByStudentNumber(number)
                 .filter(student -> {
@@ -152,6 +155,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public StudentOutingListResponse getStudentOuting(Integer number) {
         return studentRepository.findByStudentNumber(number)
                 .filter(student -> {
