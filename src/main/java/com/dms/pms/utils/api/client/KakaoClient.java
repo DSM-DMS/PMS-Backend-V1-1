@@ -1,6 +1,6 @@
 package com.dms.pms.utils.api.client;
 
-import com.dms.pms.utils.api.dto.KakaoUserInfo;
+import com.dms.pms.utils.api.dto.general.KakaoUserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;

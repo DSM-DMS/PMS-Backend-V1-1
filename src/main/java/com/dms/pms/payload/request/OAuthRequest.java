@@ -16,7 +16,7 @@ public class OAuthRequest {
     @NotNull
     private String token;
 
-    @ApiModelProperty(example = "<OAuth 공급자> 들어갈 수 있는 값들: [NAVER, FACEBOOK, APPLE, KAKAO] (대소문자 무시)")
+    @ApiModelProperty(example = "<OAuth 공급자> 들어갈 수 있는 값들: [NAVER, FACEBOOK, KAKAO] (대소문자 무시)")
     @NotNull
     private AuthProvider provider;
 

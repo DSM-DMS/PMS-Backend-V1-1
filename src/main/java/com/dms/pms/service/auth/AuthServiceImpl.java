@@ -15,6 +15,10 @@ import com.dms.pms.security.auth.RoleType;
 import com.dms.pms.security.oauth.OAuthProviderConnect;
 import com.dms.pms.security.properties.AuthProperties;
 import com.dms.pms.utils.api.client.AppleClient;
+import com.dms.pms.utils.api.client.FacebookClient;
+import com.dms.pms.utils.api.client.KakaoClient;
+import com.dms.pms.utils.api.client.NaverClient;
+import com.dms.pms.utils.api.dto.UserInfo;
 import com.dms.pms.utils.api.dto.apple.AppleToken;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +35,9 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationFacade authenticationFacade;
     private final OAuthProviderConnect oAuthProviderConnect;
+    private final FacebookClient facebookClient;
+    private final NaverClient naverClient;
+    private final KakaoClient kakaoClient;
     private final AppleClient appleClient;
     private final AuthProperties.Oauth.Apple appleProperties;
 
@@ -60,16 +67,38 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse oauthLogin(OAuthRequest request) {
-        User requestUser = oAuthProviderConnect.getUserInfo(request.getToken(), request.getProvider());
 
-        User user = userRepository.findById(requestUser.getEmail())
+        UserInfo userInfo;
+
+        switch (request.getProvider()) {
+            case FACEBOOK:
+                userInfo = facebookClient.getUserInfo("email, name", request.getToken());
+                break;
+            case NAVER:
+                userInfo = naverClient.getUserInfo(request.getToken());
+                break;
+            case KAKAO:
+                userInfo = kakaoClient.getUserInfo(request.getToken());
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + request.getProvider());
+        }
+
+        User user = userRepository.findById(userInfo.getEmail())
                 .map(resultUser -> {
-                    if (!resultUser.getAuthProvider().equals(requestUser.getAuthProvider())) {
+                    if (!resultUser.getAuthProvider().equals(request.getProvider())) {
                         throw new ProviderNotMatchException();
                     }
                     return resultUser;
                 })
-                .orElseGet(() -> userRepository.save(requestUser));
+                .orElseGet(() -> userRepository.save(
+                        User.builder()
+                        .email(userInfo.getEmail())
+                        .name(userInfo.getUserName())
+                        .roleType(RoleType.USER)
+                        .authProvider(request.getProvider())
+                        .build()
+                ));
 
         return new TokenResponse(jwtTokenProvider.generateAccessToken(user.getEmail(), user.getRoleType()));
     }
@@ -77,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AppleToken.Response appleOAuthLogin(AppleOAuthRequest request) {
-        Claims claims = jwtTokenProvider.getClaimsByAppleIdentityToken(request.getIdentityToken());
+        jwtTokenProvider.getClaimsByAppleIdentityToken(request.getIdentityToken());
 
         return appleClient.getToken(
                 AppleToken.Request.builder()
