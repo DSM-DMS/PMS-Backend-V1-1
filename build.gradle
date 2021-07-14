@@ -22,8 +22,10 @@ plugins {
 
 group = 'com.dms'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+apply plugin: 'jacoco'
 
 configurations {
     compileOnly {
@@ -34,9 +36,6 @@ configurations {
 repositories {
     mavenCentral()
 }
-
-// For coveralls
-apply plugin: 'jacoco'
 
 dependencyManagement {
     imports {
@@ -83,6 +82,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion '0.8.7'
 }
 
 jacocoTestReport {

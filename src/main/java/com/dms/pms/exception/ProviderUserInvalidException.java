@@ -5,6 +5,6 @@ import com.dms.pms.error.exception.ErrorCode;
 
 public class ProviderUserInvalidException extends BusinessException {
     public ProviderUserInvalidException() {
-        super(ErrorCode.PROVIDER_USER_NOT_FOUND);
+        super(ErrorCode.PROVIDER_USER_INVALID);
     }
 }

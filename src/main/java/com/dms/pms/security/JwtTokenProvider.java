@@ -7,22 +7,19 @@ import com.dms.pms.exception.InvalidTokenException;
 import com.dms.pms.security.auth.AuthDetailService;
 import com.dms.pms.security.auth.AuthDetails;
 import com.dms.pms.security.auth.RoleType;
-import com.dms.pms.security.properties.AuthProperties;
+import com.dms.pms.security.properties.AppleProperties;
+import com.dms.pms.security.properties.JwtProperties;
 import com.dms.pms.utils.api.client.AppleClient;
 import com.dms.pms.utils.api.dto.apple.ApplePublicKeyResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +28,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -52,9 +48,8 @@ public class JwtTokenProvider {
     private final AuthDetailService authDetailService;
     private final AppleClient appleClient;
 
-    private final AuthProperties properties;
-    private final AuthProperties.Jwt jwt = properties.getJwt();
-    private final AuthProperties.Oauth.Apple apple = properties.getOauth().getApple();
+    private final JwtProperties jwt;
+    private final AppleProperties apple;
 
     public String generateAccessToken(String email, RoleType roleType) {
         return Jwts.builder()

@@ -6,14 +6,13 @@ import com.dms.pms.entity.pms.user.UserRepository;
 import com.dms.pms.exception.LoginFailedException;
 import com.dms.pms.exception.PasswordNotMatchesException;
 import com.dms.pms.exception.ProviderNotMatchException;
-import com.dms.pms.exception.ProviderUserInvalidException;
 import com.dms.pms.payload.request.*;
 import com.dms.pms.payload.response.TokenResponse;
 import com.dms.pms.security.JwtTokenProvider;
 import com.dms.pms.security.auth.AuthenticationFacade;
 import com.dms.pms.security.auth.RoleType;
-import com.dms.pms.security.oauth.OAuthProviderConnect;
-import com.dms.pms.security.properties.AuthProperties;
+import com.dms.pms.security.properties.AppleProperties;
+import com.dms.pms.security.properties.JwtProperties;
 import com.dms.pms.utils.api.client.AppleClient;
 import com.dms.pms.utils.api.client.FacebookClient;
 import com.dms.pms.utils.api.client.KakaoClient;
@@ -34,12 +33,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationFacade authenticationFacade;
-    private final OAuthProviderConnect oAuthProviderConnect;
     private final FacebookClient facebookClient;
     private final NaverClient naverClient;
     private final KakaoClient kakaoClient;
     private final AppleClient appleClient;
-    private final AuthProperties.Oauth.Apple appleProperties;
+    private final AppleProperties appleProperties;
 
     @Override
     public TokenResponse login(LoginRequest request) {
@@ -66,6 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenResponse oauthLogin(OAuthRequest request) {
 
         UserInfo userInfo;
@@ -104,7 +103,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     public AppleToken.Response appleOAuthLogin(AppleOAuthRequest request) {
         jwtTokenProvider.getClaimsByAppleIdentityToken(request.getIdentityToken());
 
@@ -119,6 +117,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenResponse signInApple(AppleSignRequest request) {
         Claims claims = jwtTokenProvider.getClaimsByAppleIdentityToken(request.getRefreshToken());
         String id = claims.getSubject();
